@@ -115,6 +115,7 @@ Client
 
 Documents are linked to specific legal cases. The database stores document information and file paths, while the actual uploaded files are stored using Laravel storage.
 
+---
 
 **Access Control Overview**
 
