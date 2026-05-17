@@ -112,10 +112,8 @@ Client
       ├── Assigned Lawyer
       ├── Assigned Staff
       └── Documents
-
-Documents are linked to specific legal cases. The database stores document information and file paths, while the actual uploaded files are stored using Laravel storage.
-
 ```
+Documents are linked to specific legal cases. The database stores document information and file paths, while the actual uploaded files are stored using Laravel storage.
 
 ---
 
@@ -129,6 +127,7 @@ The system includes both role-based and case-based access control.
 
 Case-based access is handled through logic that checks whether the logged-in user is allowed to access a specific case.
 
+---
 
 ## Current Modules
 - Completed / Working
@@ -159,6 +158,7 @@ Case-based access is handled through logic that checks whether the logged-in use
 - Document template management
 - AI-assisted document search or summarization
 
+---
 
 ## Future Improvement: Document Templates
 
@@ -168,6 +168,7 @@ This would allow the firm to store commonly used templates such as contracts, ag
 
 This feature is not part of the current core demo scope.
 
+---
 
 ## Installation Notes
 
@@ -185,6 +186,7 @@ php artisan serve
 ```
 Database configuration should be updated inside the .env file before running migrations.
 
+---
 
 ## Disclaimer
 
