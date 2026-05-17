@@ -1,59 +1,188 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Legal Document Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based web application developed to help a small law firm manage clients, legal cases, case assignments, and case-related documents in a structured and secure way.
 
-## About Laravel
+This project is currently in development and is being built as a portfolio/final project to demonstrate practical web application development using Laravel, PHP, MySQL, role-based access control, and document management features.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Project Status
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Status:** In Development
 
-## Learning Laravel
+Current progress includes:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- User authentication
+- Role-based dashboards
+- Admin user management
+- Client management
+- Case management
+- Lawyer and staff assignment
+- Case-based access control
+- Document upload and download
+- Basic admin search
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Upcoming features include:
 
-## Laravel Sponsors
+- Audit logs
+- Dashboard improvements
+- Restricted search for lawyer and staff
+- UI polish
+- Testing and demo preparation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Main Features
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Authentication and Roles
 
-## Contributing
+The system supports multiple user roles:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Admin
+- Lawyer
+- Staff
+- Client
 
-## Code of Conduct
+Each role has different access permissions.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Admin Features
 
-## Security Vulnerabilities
+Admin users can:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Manage users
+- Create user accounts manually
+- Assign user roles
+- Manage client profiles
+- Manage legal cases
+- Assign lawyers and staff to cases
+- Upload and download case documents
+- Search clients, cases, and documents
 
-## License
+### Lawyer Features
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Lawyer users can:
+
+- View cases assigned to them
+- View case details
+- Upload and download documents for assigned cases
+
+### Staff Features
+
+Staff users can:
+
+- View cases assigned to them
+- View case details
+- Upload and download documents for assigned cases
+
+### Client Features
+
+Client users can:
+
+- View limited case progress
+- See case status, assigned lawyer, next important date, and latest update
+
+Client access is intentionally limited and does not include internal notes, staff details, or document downloads.
+
+---
+
+## Technologies Used
+
+- Laravel
+- PHP
+- MySQL
+- Blade
+- Tailwind CSS
+- Laravel Breeze
+- Eloquent ORM
+- Vite
+- Composer
+- Node.js / npm
+- XAMPP
+- Git / GitHub
+
+---
+
+## System Structure
+
+The system follows this main structure:
+
+```text
+Client
+ └── Case
+      ├── Assigned Lawyer
+      ├── Assigned Staff
+      └── Documents
+
+Documents are linked to specific legal cases. The database stores document information and file paths, while the actual uploaded files are stored using Laravel storage.
+
+
+**Access Control Overview**
+
+The system includes both role-based and case-based access control.
+- Admin can access all users, clients, cases, and documents.
+- Lawyers can only access cases assigned to them.
+- Staff can only access cases assigned to them.
+- Clients can only view limited progress for their own cases.
+
+Case-based access is handled through logic that checks whether the logged-in user is allowed to access a specific case.
+
+
+**Current Modules**
+- Completed / Working
+- Authentication system
+- Public registration disabled
+- Role middleware
+- Role-based dashboards
+- Admin user management
+- Client management
+- Case management
+- Staff assignment to cases
+- Client account linking
+- Case details page
+- Document upload
+- Document download
+- Shared case access for assigned lawyer and staff
+- Unauthorized access testing
+- Basic admin search
+
+**Planned / Future Improvements**
+- Audit logging
+- Restricted lawyer/staff search
+- Better dashboard organization
+- UI improvements
+- Report/export features
+- Notification system
+- Secure remote client portal
+- Document template management
+- AI-assisted document search or summarization
+
+
+**Future Improvement: Document Templates**
+
+A future improvement is to add a reusable document template module.
+
+This would allow the firm to store commonly used templates such as contracts, agreements, letters, and forms. Admin users would manage templates, while lawyers and staff could download them when needed.
+
+This feature is not part of the current core demo scope.
+
+
+**Installation Notes**
+
+This project is currently developed locally using XAMPP and Laravel.
+
+Basic setup steps:
+
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+npm run dev
+php artisan serve
+
+Database configuration should be updated inside the .env file before running migrations.
+
+
+**Disclaimer**
+
+This project is developed for educational and portfolio purposes. It is not yet production-ready and would require further security review, testing, deployment configuration, backup planning, and legal data protection measures before being used in a real law firm environment.
