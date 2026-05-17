@@ -115,9 +115,11 @@ Client
 
 Documents are linked to specific legal cases. The database stores document information and file paths, while the actual uploaded files are stored using Laravel storage.
 
+```
+
 ---
 
-**Access Control Overview**
+## Access Control Overview
 
 The system includes both role-based and case-based access control.
 - Admin can access all users, clients, cases, and documents.
@@ -128,7 +130,7 @@ The system includes both role-based and case-based access control.
 Case-based access is handled through logic that checks whether the logged-in user is allowed to access a specific case.
 
 
-**Current Modules**
+## Current Modules
 - Completed / Working
 - Authentication system
 - Public registration disabled
@@ -146,7 +148,7 @@ Case-based access is handled through logic that checks whether the logged-in use
 - Unauthorized access testing
 - Basic admin search
 
-**Planned / Future Improvements**
+## Planned / Future Improvements
 - Audit logging
 - Restricted lawyer/staff search
 - Better dashboard organization
@@ -158,7 +160,7 @@ Case-based access is handled through logic that checks whether the logged-in use
 - AI-assisted document search or summarization
 
 
-**Future Improvement: Document Templates**
+## Future Improvement: Document Templates
 
 A future improvement is to add a reusable document template module.
 
@@ -167,12 +169,12 @@ This would allow the firm to store commonly used templates such as contracts, ag
 This feature is not part of the current core demo scope.
 
 
-**Installation Notes**
+## Installation Notes
 
 This project is currently developed locally using XAMPP and Laravel.
 
 Basic setup steps:
-
+```bash
 composer install
 npm install
 cp .env.example .env
@@ -180,10 +182,10 @@ php artisan key:generate
 php artisan migrate
 npm run dev
 php artisan serve
-
+```
 Database configuration should be updated inside the .env file before running migrations.
 
 
-**Disclaimer**
+## Disclaimer
 
 This project is developed for educational and portfolio purposes. It is not yet production-ready and would require further security review, testing, deployment configuration, backup planning, and legal data protection measures before being used in a real law firm environment.
