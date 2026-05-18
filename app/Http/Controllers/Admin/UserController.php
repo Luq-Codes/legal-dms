@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Auditlog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,12 +30,18 @@ class UserController extends Controller
             'role' => 'required|in:admin,lawyer,staff,client',
           ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
           ]);
+
+        AuditLog::record(
+            'User Created',
+            'Users',
+            'Created user ' . $user->name . ' with role ' . $user->role . '.'
+        );
 
       return redirect()->route('admin.users.index')
         ->with('success', 'User created successfully.');
@@ -51,11 +58,19 @@ class UserController extends Controller
             'role' => 'required|in:admin,lawyer,staff,client',
         ]);
 
+        $oldRole = $user->role;
+
         $user->update([
             'role' => $request->role,
         ]);
 
+        AuditLog::record(
+            'User Role Updated',
+            'Users',
+            'Changed user ' . $user->name . ' role from ' . $oldRole . ' to ' . $user->role . '.'
+        );
+
         return redirect()->route('admin.users.index')
             ->with('success', 'User role updated successfully.');
-    }
+     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Document;
 use App\Models\LegalCase;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -19,6 +20,12 @@ class SearchController extends Controller
         $documents = collect();
 
         if ($query) {
+            AuditLog::record(
+                'Search Performed',
+                'Search',
+                'Searched for "' . $query . '".'
+            );
+            
             $clients = Client::where('name', 'like', "%{$query}%")
                 ->orWhere('ic_passport_no', 'like', "%{$query}%")
                 ->orWhere('email', 'like', "%{$query}%")

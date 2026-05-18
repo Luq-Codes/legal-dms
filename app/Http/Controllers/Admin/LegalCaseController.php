@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\LegalCase;
 use App\Models\User;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 
 class LegalCaseController extends Controller
@@ -77,6 +78,12 @@ class LegalCaseController extends Controller
 
 $case->staff()->sync($request->staff_ids ?? []);
 
+        AuditLog::record(
+            'Case Created',
+            'Cases',
+            'Created case ' . $case->case_reference . ' - ' . $case->case_title . '.'
+        );
+        
         return redirect()->route('admin.cases.index')
             ->with('success', 'Case created successfully.');
     }

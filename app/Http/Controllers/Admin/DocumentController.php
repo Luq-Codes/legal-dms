@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\LegalCase;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,7 +29,7 @@ class DocumentController extends Controller
 
         $filePath = $uploadedFile->store('case_documents', 'public');
 
-        Document::create([
+       $document = Document::create([
             'legal_case_id' => $case->id,
             'uploaded_by' => auth()->id(),
             'document_title' => $request->document_title,
@@ -37,6 +38,12 @@ class DocumentController extends Controller
             'document_status' => $request->document_status,
             'notes' => $request->notes,
         ]);
+
+        AuditLog::record(
+            'Document Uploaded',
+            'Documents',
+            'Uploaded document ' . $document->document_title . ' to case ' . $case->case_reference . '.'
+        );
 
          return redirect()->route('admin.cases.show', $case)
             ->with('success', 'Document uploaded successfully.');
@@ -48,9 +55,15 @@ class DocumentController extends Controller
         abort(404, 'File not found.');
         }
 
+        AuditLog::record(
+            'Document Downloaded',
+            'Documents',
+            'Downloaded document ' . $document->document_title . ' from case ' . $document->legalCase->case_reference . '.'
+        );
+
         return Storage::disk('public')->download(
-        $document->file_path,
-        $document->original_filename
+            $document->file_path,
+            $document->original_filename
         );
     }
 
@@ -80,7 +93,7 @@ class DocumentController extends Controller
 
         $filePath = $uploadedFile->store('case_documents', 'public');
 
-        Document::create([
+        $document = Document::create([
             'legal_case_id' => $case->id,
             'uploaded_by' => auth()->id(),
             'document_title' => $request->document_title,
@@ -89,6 +102,12 @@ class DocumentController extends Controller
             'document_status' => $request->document_status,
             'notes' => $request->notes,
         ]);
+
+        AuditLog::record(
+            'Document Uploaded',
+            'Documents',
+            'Uploaded document ' . $document->document_title . ' to case ' . $case->case_reference . '.'
+        );
 
         return redirect()->route('cases.show', $case)
             ->with('success', 'Document uploaded successfully.');
@@ -105,6 +124,12 @@ class DocumentController extends Controller
         if (!Storage::disk('public')->exists($document->file_path)) {
             abort(404, 'File not found.');
         }
+
+            AuditLog::record(
+            'Document Downloaded',
+            'Documents',
+            'Downloaded document ' . $document->document_title . ' from case ' . $document->legalCase->case_reference . '.'
+        );
 
         return Storage::disk('public')->download(
             $document->file_path,

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\LegalCaseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\SearchController;
+use App\Http\Controllers\Admin\AuditLogController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -75,7 +76,11 @@ Route::get('/admin/documents/{document}/download', [DocumentController::class, '
 
 Route::get('/admin/search', [SearchController::class, 'index'])
     ->middleware(['auth', 'role:admin'])
-    ->name('admin.search.index');    
+    ->name('admin.search.index');   
+    
+Route::get('/admin/audit-logs', [AuditLogController::class, 'index'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.audit-logs.index');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])

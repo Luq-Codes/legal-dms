@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -34,7 +35,7 @@ class ClientController extends Controller
             'address' => 'nullable|string',
         ]);
 
-        Client::create([
+        $client = Client::create([
             'user_id' => $request->user_id,
             'name' => $request->name,
             'ic_passport_no' => $request->ic_passport_no,
@@ -42,6 +43,12 @@ class ClientController extends Controller
             'email' => $request->email,
             'address' => $request->address,
         ]);
+
+        AuditLog::record(
+            'Client Created',
+            'Clients',
+            'Created client profile for ' . $client->name . '.'
+        );
 
         return redirect()->route('admin.clients.index')
             ->with('success', 'Client created successfully.');
