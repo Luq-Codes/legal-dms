@@ -86,7 +86,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
 
-Route::get('/cases/{case}', [DashboardController::class, 'showCase'])
+Route::get('/search', [SearchController::class, 'shared'])
+    ->middleware(['auth'])
+    ->name('search.index');
+
+    Route::get('/cases/{case}', [DashboardController::class, 'showCase'])
     ->middleware(['auth'])
     ->name('cases.show');
 Route::get('/cases/{case}/documents/create', [DocumentController::class, 'sharedCreate'])

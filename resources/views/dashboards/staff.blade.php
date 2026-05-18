@@ -25,6 +25,11 @@
                            class="inline-block bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
                             Closed / Archived Cases
                         </a>
+
+                        <a href="{{ route('search.index') }}"
+                            class="inline-block bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
+                                Search
+                        </a>
                     </div>
 
                 </div>
