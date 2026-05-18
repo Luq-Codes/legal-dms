@@ -121,10 +121,26 @@ Route::get('/lawyer/dashboard', [DashboardController::class, 'lawyer'])
     ->middleware(['auth', 'role:lawyer'])
     ->name('lawyer.dashboard');
 
+Route::get('/lawyer/cases/active', [DashboardController::class, 'lawyerActiveCases'])
+    ->middleware(['auth', 'role:lawyer'])
+    ->name('lawyer.cases.active');
+
+Route::get('/lawyer/cases/closed', [DashboardController::class, 'lawyerClosedCases'])
+    ->middleware(['auth', 'role:lawyer'])
+    ->name('lawyer.cases.closed');
+
 Route::get('/staff/dashboard', [DashboardController::class, 'staff'])
     ->middleware(['auth', 'role:staff'])
     ->name('staff.dashboard');
 
-Route::get('/client/dashboard', [DashboardController::class, 'client'])
+    Route::get('/staff/cases/active', [DashboardController::class, 'staffActiveCases'])
+    ->middleware(['auth', 'role:staff'])
+    ->name('staff.cases.active');
+
+Route::get('/staff/cases/closed', [DashboardController::class, 'staffClosedCases'])
+    ->middleware(['auth', 'role:staff'])
+    ->name('staff.cases.closed');
+
+    Route::get('/client/dashboard', [DashboardController::class, 'client'])
     ->middleware(['auth', 'role:client'])
     ->name('client.dashboard');

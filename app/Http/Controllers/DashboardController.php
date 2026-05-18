@@ -31,23 +31,74 @@ class DashboardController extends Controller
 
     public function lawyer()
     {
+    return view('dashboards.lawyer');
+    }
+
+    public function lawyerActiveCases()
+    {
+    $cases = LegalCase::with(['client', 'staff'])
+        ->where('assigned_lawyer_id', auth()->id())
+        ->whereIn('case_status', [
+            'Open',
+            'In Progress',
+            'Pending Hearing',
+            'Pending Client',
+        ])
+        ->latest()
+        ->get();
+
+    return view('lawyer.cases.active', compact('cases'));
+    }
+
+    public function lawyerClosedCases()
+    {
         $cases = LegalCase::with(['client', 'staff'])
             ->where('assigned_lawyer_id', auth()->id())
+            ->whereIn('case_status', [
+                'Closed',
+                'Archived',
+            ])
             ->latest()
             ->get();
 
-        return view('dashboards.lawyer', compact('cases'));
+        return view('lawyer.cases.closed', compact('cases'));
     }
 
     public function staff()
     {
-    $cases = auth()->user()
-        ->assignedStaffCases()
-        ->with(['client', 'assignedLawyer'])
-        ->latest()
-        ->get();
+        return view('dashboards.staff');
+    }
 
-    return view('dashboards.staff', compact('cases'));
+    public function staffActiveCases()
+    {
+        $cases = auth()->user()
+            ->assignedStaffCases()
+            ->with(['client', 'assignedLawyer'])
+            ->whereIn('case_status', [
+                'Open',
+                'In Progress',
+                'Pending Hearing',
+                'Pending Client',
+            ])
+            ->latest()
+            ->get();
+
+        return view('staff.cases.active', compact('cases'));
+    }
+
+    public function staffClosedCases()
+    {
+        $cases = auth()->user()
+            ->assignedStaffCases()
+            ->with(['client', 'assignedLawyer'])
+            ->whereIn('case_status', [
+                'Closed',
+                'Archived',
+            ])
+            ->latest()
+            ->get();
+
+        return view('staff.cases.closed', compact('cases'));
     }
 
     public function client()
