@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LegalCase;
+use App\Models\AuditLog;
 
 class DashboardController extends Controller
 {
@@ -99,6 +100,29 @@ class DashboardController extends Controller
             ->get();
 
         return view('staff.cases.closed', compact('cases'));
+    }
+
+    public function closeCase(LegalCase $case)
+    {
+        $user = auth()->user();
+
+        if ($user->role !== 'admin' && !($user->role === 'lawyer' && $case->assigned_lawyer_id === $user->id)) {
+            abort(403, 'Unauthorized');
+        }
+
+        $case->update([
+            'case_status' => 'Closed',
+            'closed_date' => now()->toDateString(),
+        ]);
+
+        AuditLog::record(
+            'Case Closed',
+            'Cases',
+            'Closed case ' . $case->case_reference . ' - ' . $case->case_title . '.'
+        );
+
+        return redirect()->route('cases.show', $case)
+            ->with('success', 'Case closed successfully.');
     }
 
     public function client()

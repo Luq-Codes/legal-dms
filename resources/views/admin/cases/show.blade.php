@@ -66,10 +66,12 @@
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="font-semibold text-lg">Documents</h4>
 
+                        @if ($case->case_status !== 'Closed')
                         <a href="{{ route('admin.documents.create', $case) }}"
                         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                             Upload Document
                         </a>
+                        @endif
                     </div>
 
                     <table class="w-full border-collapse border border-gray-300">
@@ -112,6 +114,20 @@
                     </table>
                 </div>
 
+                    @if ($case->case_status !== 'Closed')
+                        <form method="POST"
+                            action="{{ route('admin.cases.close', $case) }}"
+                            class="inline-block"
+                            onsubmit="return confirm('Are you sure you want to close this case?');">
+                            @csrf
+                            @method('PUT')
+
+                            <button type="submit"
+                                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                                Close This Case
+                            </button>
+                        </form>
+                    @endif
                     <a href="{{ route('admin.cases.index') }}"
                        class="inline-block bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
                         Back to Cases

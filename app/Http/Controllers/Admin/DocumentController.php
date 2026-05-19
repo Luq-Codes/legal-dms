@@ -13,11 +13,21 @@ class DocumentController extends Controller
 {
     public function create(LegalCase $case)
     {
+        if ($case->case_status === 'Closed') {
+            return redirect()->route('admin.cases.show', $case)
+                ->with('error', 'Documents cannot be uploaded to a closed case.');
+        }
+
         return view('admin.documents.create', compact('case'));
     }
 
     public function store(Request $request, LegalCase $case)
     {
+        if ($case->case_status === 'Closed') {
+            return redirect()->route('admin.cases.show', $case)
+                ->with('error', 'Documents cannot be uploaded to a closed case.');
+        }
+    
         $request->validate([
             'document_title' => 'required|string|max:255',
             'document_status' => 'required|in:Draft,Under Review,Final,Signed,Archived',
@@ -68,13 +78,18 @@ class DocumentController extends Controller
     }
 
     public function sharedCreate(LegalCase $case)
-{
-    if (!$case->isAccessibleBy(auth()->user())) {
-        abort(403, 'Unauthorized');
-    }
+    {
+        if (!$case->isAccessibleBy(auth()->user())) {
+            abort(403, 'Unauthorized');
+        }
 
-    return view('documents.create', compact('case'));
-}
+        if ($case->case_status === 'Closed') {
+            return redirect()->route('cases.show', $case)
+                ->with('error', 'Documents cannot be uploaded to a closed case.');
+        }
+
+        return view('documents.create', compact('case'));
+    }
 
     public function sharedStore(Request $request, LegalCase $case)
     {
@@ -82,6 +97,11 @@ class DocumentController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        if ($case->case_status === 'Closed') {
+        return redirect()->route('cases.show', $case)
+            ->with('error', 'Documents cannot be uploaded to a closed case.');
+        }
+        
         $request->validate([
             'document_title' => 'required|string|max:255',
             'document_status' => 'required|in:Draft,Under Review,Final,Signed,Archived',

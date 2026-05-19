@@ -62,13 +62,17 @@ Route::put('/admin/cases/{case}', [LegalCaseController::class, 'update'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.cases.update');
 
-Route::get('/admin/cases/{case}', [LegalCaseController::class, 'show'])
-    ->middleware(['auth', 'role:admin'])
-    ->name('admin.cases.show');
-
 Route::post('/admin/cases', [LegalCaseController::class, 'store'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.cases.store');
+
+Route::put('/admin/cases/{case}/close', [LegalCaseController::class, 'close'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.cases.close');
+
+Route::get('/admin/cases/{case}', [LegalCaseController::class, 'show'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.cases.show');
 
 Route::get('/admin/cases/{case}/documents/create', [DocumentController::class, 'create'])
     ->middleware(['auth', 'role:admin'])
@@ -113,6 +117,10 @@ Route::get('/documents/{document}/download', [DocumentController::class, 'shared
     ->middleware(['auth'])
     ->name('documents.download');
 
+Route::put('/cases/{case}/close', [DashboardController::class, 'closeCase'])
+    ->middleware(['auth'])
+    ->name('cases.close');
+    
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

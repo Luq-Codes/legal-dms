@@ -60,10 +60,12 @@
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="font-semibold text-lg">Documents</h4>
 
+                            @if ($case->case_status !== 'Closed')
                             <a href="{{ route('documents.create', $case) }}"
-                               class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                 Upload Document
                             </a>
+                            @endif
                         </div>
 
                         <table class="w-full border-collapse border border-gray-300">
@@ -106,9 +108,30 @@
                         </table>
                     </div>
 
+                    @if (
+                        $case->case_status !== 'Closed' &&
+                        (
+                            auth()->user()->role === 'admin' ||
+                            (auth()->user()->role === 'lawyer' && $case->assigned_lawyer_id === auth()->id())
+                        )
+                    )
+                        <form method="POST"
+                            action="{{ route('cases.close', $case) }}"
+                            class="inline-block"
+                            onsubmit="return confirm('Are you sure you want to close this case?');">
+                            @csrf
+                            @method('PUT')
+
+                            <button type="submit"
+                                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                                Close This Case
+                            </button>
+                        </form>
+                    @endif
+
                     <a href="{{ route('dashboard') }}"
-                       class="inline-block bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
-                        Back to Dashboard
+                        class="inline-block bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 ml-2">
+                            Back to Dashboard
                     </a>
 
                 </div>

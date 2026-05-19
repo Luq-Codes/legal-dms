@@ -92,6 +92,23 @@ class LegalCaseController extends Controller
             ->with('success', 'Case updated successfully.');
     }
 
+    public function close(LegalCase $case)
+    {
+        $case->update([
+            'case_status' => 'Closed',
+            'closed_date' => now()->toDateString(),
+        ]);
+
+        AuditLog::record(
+            'Case Closed',
+            'Cases',
+            'Closed case ' . $case->case_reference . ' - ' . $case->case_title . '.'
+        );
+
+        return redirect()->route('admin.cases.show', $case)
+            ->with('success', 'Case closed successfully.');
+    }
+
     public function create()
     {
     $clients = Client::orderBy('name')->get();
