@@ -55,22 +55,34 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'role' => 'required|in:admin,lawyer,staff,client',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         $oldRole = $user->role;
+        $oldEmail = $user->email;
 
-        $user->update([
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
             'role' => $request->role,
-        ]);
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
 
         AuditLog::record(
-            'User Role Updated',
+            'User Updated',
             'Users',
-            'Changed user ' . $user->name . ' role from ' . $oldRole . ' to ' . $user->role . '.'
+            'Updated user ' . $user->name . '. Role changed from ' . $oldRole . ' to ' . $user->role . '. Email changed from ' . $oldEmail . ' to ' . $user->email . '.'
         );
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User role updated successfully.');
-     }
+            ->with('success', 'User updated successfully.');
+    }
 }

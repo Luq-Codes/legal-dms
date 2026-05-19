@@ -54,6 +54,14 @@ Route::get('/admin/cases/create', [LegalCaseController::class, 'create'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.cases.create');
 
+Route::get('/admin/cases/{case}/edit', [LegalCaseController::class, 'edit'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.cases.edit');
+
+Route::put('/admin/cases/{case}', [LegalCaseController::class, 'update'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.cases.update');
+
 Route::get('/admin/cases/{case}', [LegalCaseController::class, 'show'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.cases.show');
