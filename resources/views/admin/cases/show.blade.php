@@ -66,14 +66,22 @@
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="font-semibold text-lg">Documents</h4>
 
-                        @if ($case->case_status !== 'Closed')
-                        <a href="{{ route('admin.documents.create', $case) }}"
-                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                            Upload Document
-                        </a>
-                        @endif
-                    </div>
+                        <div class="flex gap-2">
+                            @if ($case->case_status !== 'Closed')
+                                <button type="button"
+                                        onclick="document.getElementById('progressModal').classList.remove('hidden')"
+                                        class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
+                                    Update Progress
+                                </button>
 
+                                <a href="{{ route('admin.documents.create', $case) }}"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                    Upload Document
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                        
                     <table class="w-full border-collapse border border-gray-300">
                         <thead>
                             <tr class="bg-gray-100">
@@ -112,8 +120,107 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>
+                        <div id="progressModal"
+                            class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                            <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
 
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-semibold">Update Case Progress</h3>
+
+                                    <button type="button"
+                                            onclick="document.getElementById('progressModal').classList.add('hidden')"
+                                            class="text-gray-600 hover:text-gray-900">
+                                        ✕
+                                    </button>
+                                </div>
+
+                                <form method="POST" action="{{ route('admin.cases.progress.update', $case) }}">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <div class="mb-4">
+                                        <label for="case_status" class="block font-medium text-sm text-gray-700">
+                                            Case Status
+                                        </label>
+
+                                        <select name="case_status" id="case_status"
+                                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                            @foreach (['Open', 'In Progress', 'Pending Hearing', 'Pending Client', 'Archived'] as $status)
+                                                <option value="{{ $status }}" {{ old('case_status', $case->case_status) === $status ? 'selected' : '' }}>
+                                                    {{ $status }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        @error('case_status')
+                                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="next_important_date" class="block font-medium text-sm text-gray-700">
+                                            Next Important Date
+                                        </label>
+
+                                        <input type="date"
+                                            name="next_important_date"
+                                            id="next_important_date"
+                                            value="{{ old('next_important_date', $case->next_important_date) }}"
+                                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+
+                                        @error('next_important_date')
+                                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="latest_client_update" class="block font-medium text-sm text-gray-700">
+                                            Latest Client Update
+                                        </label>
+
+                                        <textarea name="latest_client_update"
+                                                id="latest_client_update"
+                                                rows="3"
+                                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ old('latest_client_update', $case->latest_client_update) }}</textarea>
+
+                                        @error('latest_client_update')
+                                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="internal_notes" class="block font-medium text-sm text-gray-700">
+                                            Internal Notes
+                                        </label>
+
+                                        <textarea name="internal_notes"
+                                                id="internal_notes"
+                                                rows="3"
+                                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ old('internal_notes', $case->internal_notes) }}</textarea>
+
+                                        @error('internal_notes')
+                                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="flex justify-end gap-2">
+                                        <button type="button"
+                                                onclick="document.getElementById('progressModal').classList.add('hidden')"
+                                                class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                                            Cancel
+                                        </button>
+
+                                        <button type="submit"
+                                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                            Save Progress
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+                </div>
                     @if ($case->case_status !== 'Closed')
                         <form method="POST"
                             action="{{ route('admin.cases.close', $case) }}"

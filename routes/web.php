@@ -46,7 +46,7 @@ Route::post('/admin/clients', [ClientController::class, 'store'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.clients.store');
 
-    Route::get('/admin/cases', [LegalCaseController::class, 'index'])
+Route::get('/admin/cases', [LegalCaseController::class, 'index'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.cases.index');
 
@@ -65,6 +65,10 @@ Route::put('/admin/cases/{case}', [LegalCaseController::class, 'update'])
 Route::post('/admin/cases', [LegalCaseController::class, 'store'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.cases.store');
+
+Route::put('/admin/cases/{case}/progress', [LegalCaseController::class, 'updateProgress'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.cases.progress.update');
 
 Route::put('/admin/cases/{case}/close', [LegalCaseController::class, 'close'])
     ->middleware(['auth', 'role:admin'])
@@ -102,9 +106,10 @@ Route::get('/search', [SearchController::class, 'shared'])
     ->middleware(['auth'])
     ->name('search.index');
 
-    Route::get('/cases/{case}', [DashboardController::class, 'showCase'])
+Route::get('/cases/{case}', [DashboardController::class, 'showCase'])
     ->middleware(['auth'])
     ->name('cases.show');
+
 Route::get('/cases/{case}/documents/create', [DocumentController::class, 'sharedCreate'])
     ->middleware(['auth'])
     ->name('documents.create');
@@ -117,10 +122,14 @@ Route::get('/documents/{document}/download', [DocumentController::class, 'shared
     ->middleware(['auth'])
     ->name('documents.download');
 
+Route::put('/cases/{case}/progress', [DashboardController::class, 'updateCaseProgress'])
+    ->middleware(['auth'])
+    ->name('cases.progress.update');
+
 Route::put('/cases/{case}/close', [DashboardController::class, 'closeCase'])
     ->middleware(['auth'])
     ->name('cases.close');
-    
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -92,6 +92,60 @@ class LegalCaseController extends Controller
             ->with('success', 'Case updated successfully.');
     }
 
+    public function updateProgress(Request $request, LegalCase $case)
+    {
+        if ($case->case_status === 'Closed') {
+            return redirect()->route('admin.cases.show', $case)
+                ->with('error', 'Closed cases cannot be updated.');
+        }
+
+        $request->validate([
+            'case_status' => 'required|string|max:255',
+            'next_important_date' => 'nullable|date',
+            'latest_client_update' => 'nullable|string',
+            'internal_notes' => 'nullable|string',
+        ]);
+
+       $oldStatus = $case->case_status;
+        $oldNextImportantDate = $case->next_important_date;
+        $oldLatestClientUpdate = $case->latest_client_update;
+        $oldInternalNotes = $case->internal_notes;
+
+        $case->update([
+            'case_status' => $request->case_status,
+            'next_important_date' => $request->next_important_date,
+            'latest_client_update' => $request->latest_client_update,
+            'internal_notes' => $request->internal_notes,
+        ]);
+
+        $changes = [];
+
+        if ($oldStatus !== $case->case_status) {
+            $changes[] = 'Status changed from ' . $oldStatus . ' to ' . $case->case_status . '.';
+        }
+
+        if ($oldNextImportantDate != $case->next_important_date) {
+            $changes[] = 'Next important date updated.';
+        }
+
+        if ($oldLatestClientUpdate !== $case->latest_client_update) {
+            $changes[] = 'Latest client update updated.';
+        }
+
+        if ($oldInternalNotes !== $case->internal_notes) {
+            $changes[] = 'Internal notes updated.';
+        }
+
+        AuditLog::record(
+            'Case Progress Updated',
+            'Cases',
+            'Updated progress for case ' . $case->case_reference . '. ' . implode(' ', $changes)
+        );
+
+        return redirect()->route('admin.cases.show', $case)
+            ->with('success', 'Case progress updated successfully.');
+    }
+
     public function close(LegalCase $case)
     {
         $case->update([

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LegalCase;
 use App\Models\AuditLog;
-
+use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index()
@@ -123,6 +123,66 @@ class DashboardController extends Controller
 
         return redirect()->route('cases.show', $case)
             ->with('success', 'Case closed successfully.');
+    }
+
+    public function updateCaseProgress(Request $request, LegalCase $case)
+    {
+        $user = auth()->user();
+
+        if (!($user->role === 'lawyer' && $case->assigned_lawyer_id === $user->id)) {
+            abort(403, 'Unauthorized');
+        }
+
+        if ($case->case_status === 'Closed') {
+            return redirect()->route('cases.show', $case)
+                ->with('error', 'Closed cases cannot be updated.');
+        }
+
+        $request->validate([
+            'case_status' => 'required|string|max:255',
+            'next_important_date' => 'nullable|date',
+            'latest_client_update' => 'nullable|string',
+            'internal_notes' => 'nullable|string',
+        ]);
+
+        $oldStatus = $case->case_status;
+        $oldNextImportantDate = $case->next_important_date;
+        $oldLatestClientUpdate = $case->latest_client_update;
+        $oldInternalNotes = $case->internal_notes;
+
+        $case->update([
+            'case_status' => $request->case_status,
+            'next_important_date' => $request->next_important_date,
+            'latest_client_update' => $request->latest_client_update,
+            'internal_notes' => $request->internal_notes,
+        ]);
+
+        $changes = [];
+
+        if ($oldStatus !== $case->case_status) {
+            $changes[] = 'Status changed from ' . $oldStatus . ' to ' . $case->case_status . '.';
+        }
+
+        if ($oldNextImportantDate != $case->next_important_date) {
+            $changes[] = 'Next important date updated.';
+        }
+
+        if ($oldLatestClientUpdate !== $case->latest_client_update) {
+            $changes[] = 'Latest client update updated.';
+        }
+
+        if ($oldInternalNotes !== $case->internal_notes) {
+            $changes[] = 'Internal notes updated.';
+        }
+
+        AuditLog::record(
+            'Case Progress Updated',
+            'Cases',
+            'Updated progress for case ' . $case->case_reference . '. ' . implode(' ', $changes)
+        );
+
+        return redirect()->route('cases.show', $case)
+            ->with('success', 'Case progress updated successfully.');
     }
 
     public function client()
