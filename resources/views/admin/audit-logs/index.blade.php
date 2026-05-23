@@ -12,6 +12,20 @@
                 <div class="p-6 text-gray-900">
 
                     <h3 class="text-lg font-semibold mb-4">System Activity</h3>
+                   
+                    <div class="flex gap-2 mb-4">
+                        <a href="{{ route('admin.audit-logs.index') }}"
+                        class="px-4 py-2 rounded {{ !$module ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                            All
+                        </a>
+
+                        @foreach ($modules as $moduleName)
+                            <a href="{{ route('admin.audit-logs.index', ['module' => $moduleName]) }}"
+                            class="px-4 py-2 rounded {{ $module === $moduleName ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                {{ $moduleName }}
+                            </a>
+                        @endforeach
+                    </div>
 
                     <table class="w-full border-collapse border border-gray-300">
                         <thead>
@@ -56,6 +70,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    <div class="mt-4">
+                        {{ $logs->appends(request()->query())->links() }}
+                    </div>
 
                     <div class="mt-4">
                         <a href="{{ route('admin.dashboard') }}"
