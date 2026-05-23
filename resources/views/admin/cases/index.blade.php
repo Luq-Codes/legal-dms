@@ -70,6 +70,9 @@
                     @endforelse
                         </tbody>
                     </table>
+                    <div class="mt-4">
+                        {{ $cases->links()}}
+                    </div>
 
                 </div>
             </div>

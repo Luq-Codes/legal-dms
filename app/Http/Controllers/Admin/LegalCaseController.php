@@ -15,7 +15,7 @@ class LegalCaseController extends Controller
     {
         $cases = LegalCase::with(['client', 'assignedLawyer', 'staff'])
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('admin.cases.index', compact('cases'));
     }
