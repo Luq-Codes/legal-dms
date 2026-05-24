@@ -90,6 +90,10 @@ Route::get('/admin/documents/{document}/download', [DocumentController::class, '
     ->middleware(['auth', 'role:admin'])
     ->name('admin.documents.download');
 
+Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])
+    ->middleware(['auth'])
+    ->name('documents.destroy');
+
 Route::get('/admin/search', [SearchController::class, 'index'])
     ->middleware(['auth', 'role:admin'])
     ->name('admin.search.index');   

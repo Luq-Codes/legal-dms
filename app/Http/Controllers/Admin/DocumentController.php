@@ -101,7 +101,7 @@ class DocumentController extends Controller
         return redirect()->route('cases.show', $case)
             ->with('error', 'Documents cannot be uploaded to a closed case.');
         }
-        
+
         $request->validate([
             'document_title' => 'required|string|max:255',
             'document_status' => 'required|in:Draft,Under Review,Final,Signed,Archived',
@@ -155,5 +155,34 @@ class DocumentController extends Controller
             $document->file_path,
             $document->original_filename
         );
+    }
+
+    public function destroy(Document $document)
+    {
+        $case = $document->legalCase;
+        $user = auth()->user();
+
+        if ($case->case_status === 'Closed') {
+            return redirect()->back()
+                ->with('error', 'Documents cannot be deleted from a closed case.');
+        }
+
+        if (
+            $user->role !== 'admin' &&
+            !($user->role === 'lawyer' && $case->assigned_lawyer_id === $user->id)
+        ) {
+            abort(403, 'Unauthorized');
+        }
+
+        AuditLog::record(
+            'Document Deleted',
+            'Documents',
+            'Soft deleted document ' . $document->document_title . ' from case ' . $case->case_reference . '.'
+        );
+
+        $document->delete();
+
+        return redirect()->back()
+            ->with('success', 'Document deleted successfully.');
     }
 }

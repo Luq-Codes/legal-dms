@@ -104,12 +104,27 @@
                                     <td class="border border-gray-300 px-4 py-2">{{ $document->uploader->name ?? '-' }}</td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $document->created_at->format('d M Y') }}</td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $document->notes ?? '-' }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <a href="{{ route('admin.documents.download', $document) }}"
-                                        class="text-blue-600 hover:underline">
-                                            Download
-                                        </a>
-                                    </td>
+                                   <td class="border border-gray-300 px-4 py-2">
+                                    <a href="{{ route('admin.documents.download', $document) }}"
+                                    class="text-blue-600 hover:underline">
+                                        Download
+                                    </a>
+
+                                    @if ($case->case_status !== 'Closed')
+                                        <form method="POST"
+                                            action="{{ route('documents.destroy', $document) }}"
+                                            class="inline-block ml-2"
+                                            onsubmit="return confirm('Are you sure you want to delete this document?');">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit"
+                                                    class="text-red-600 hover:underline">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    @endif
+                                </td>
                                 </tr>
                             @empty
                                 <tr>
