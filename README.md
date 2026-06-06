@@ -8,27 +8,30 @@ This project is currently in development and is being built as a portfolio/final
 
 ## Project Status
 
-**Status:** In Development
+## Project Status
+
+**Status:** Active Development (Demo Preparation Phase)
 
 Current progress includes:
 
-- User authentication
+- User authentication and role-based access control
 - Role-based dashboards
-- Admin user management
+- User management
 - Client management
 - Case management
 - Lawyer and staff assignment
-- Case-based access control
+- Client account linking
+- Quick case progress updates
+- Case closure workflow
 - Document upload and download
-- Basic admin search
+- Document soft delete
+- Restricted search functionality
+- Audit logging
+- Audit log filtering and pagination
+- Pagination for users, clients, and cases
+- Case-based access control
 
-Upcoming features include:
-
-- Audit logs
-- Dashboard improvements
-- Restricted search for lawyer and staff
-- UI polish
-- Testing and demo preparation
+Remaining work focuses on testing, UI refinement, and demo preparation.
 
 ---
 
@@ -62,17 +65,23 @@ Admin users can:
 
 Lawyer users can:
 
-- View cases assigned to them
-- View case details
-- Upload and download documents for assigned cases
+- View assigned cases
+- Update case progress
+- Close assigned cases
+- Upload documents for active cases
+- Download documents
+- Soft delete documents for active assigned cases
 
 ### Staff Features
 
 Staff users can:
 
-- View cases assigned to them
+- View assigned cases
 - View case details
-- Upload and download documents for assigned cases
+- Upload documents for active assigned cases
+- Download documents
+
+Staff users operate in a restricted role and cannot update case progress, close cases, or delete documents.
 
 ### Client Features
 
@@ -130,43 +139,118 @@ Case-based access is handled through logic that checks whether the logged-in use
 ---
 
 ## Current Modules
-- Completed / Working
+
+### Completed Features
+
 - Authentication system
 - Public registration disabled
 - Role middleware
 - Role-based dashboards
-- Admin user management
+- User management
 - Client management
 - Case management
-- Staff assignment to cases
+- Lawyer and staff assignment
 - Client account linking
-- Case details page
+- Shared case access for assigned lawyer and staff
+- Quick case progress updates
+- Case closure workflow
 - Document upload
 - Document download
-- Shared case access for assigned lawyer and staff
-- Unauthorized access testing
-- Basic admin search
+- Document soft delete
+- Restricted search
+- Audit logging
+- Audit log filtering
+- Pagination
+- Case-based access control
+- Unauthorized access protection
 
 ## Planned / Future Improvements
-- Audit logging
-- Restricted lawyer/staff search
-- Better dashboard organization
-- UI improvements
-- Report/export features
+
+- Report and export functionality
 - Notification system
 - Secure remote client portal
 - Document template management
-- AI-assisted document search or summarization
+- AI-assisted document search and summarization
+- Restore deleted documents module
+- Advanced reporting dashboard
 
 ---
 
-## Future Improvement: Document Templates
+## Case Progress Tracking
 
-A future improvement is to add a reusable document template module.
+Authorized users can quickly update case progress through a dedicated progress update module.
 
-This would allow the firm to store commonly used templates such as contracts, agreements, letters, and forms. Admin users would manage templates, while lawyers and staff could download them when needed.
+The following information can be updated:
 
-This feature is not part of the current core demo scope.
+- Case status
+- Next important date
+- Client update
+- Internal notes
+
+Progress updates are recorded in the audit log for accountability and traceability.
+
+---
+
+## Document Management
+
+The system supports:
+
+- Document upload
+- Document download
+- Document soft delete
+- Case-based document access control
+
+Soft delete allows documents to be removed from normal views while preserving records for future recovery and auditing purposes.
+
+---
+
+## Audit Logging
+
+The system records important activities performed by users.
+
+Tracked activities include:
+
+- User updates
+- Client creation
+- Case creation
+- Case updates
+- Case progress updates
+- Case closure
+- Document uploads
+- Document downloads
+- Document deletions
+- Search activities
+
+Audit logs can be filtered by module and are paginated for easier monitoring.
+
+---
+
+## Case Lifecycle Rules
+
+When a case is marked as Closed:
+
+- Progress updates are disabled
+- Document uploads are disabled
+- Document deletion is disabled
+- Existing documents remain downloadable
+
+These restrictions help preserve case records and prevent unintended modifications after case completion.
+
+---
+
+## Security Features
+
+The system incorporates several security and access-control mechanisms:
+
+- Role-based access control
+- Case-based authorization
+- Restricted search visibility
+- Audit trail logging
+- Document soft delete
+- Closed-case modification restrictions
+- Unauthorized access protection
+
+These controls help ensure that users only access information relevant to their assigned responsibilities.
 
 ---
 
