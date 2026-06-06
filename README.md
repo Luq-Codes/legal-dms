@@ -8,8 +8,6 @@ This project is currently in development and is being built as a portfolio/final
 
 ## Project Status
 
-## Project Status
-
 **Status:** Active Development (Demo Preparation Phase)
 
 Current progress includes:
@@ -115,13 +113,20 @@ Client access is intentionally limited and does not include internal notes, staf
 
 The system follows this main structure:
 
+## Workflow Overview
+
 ```text
 Client
- └── Case
+ └── Legal Case
       ├── Assigned Lawyer
       ├── Assigned Staff
-      └── Documents
+      ├── Case Progress Updates
+      ├── Documents
+      └── Audit Trail
 ```
+
+Case activities are tracked through audit logs to provide accountability and traceability throughout the case lifecycle.
+
 Documents are linked to specific legal cases. The database stores document information and file paths, while the actual uploaded files are stored using Laravel storage.
 
 ---
@@ -271,6 +276,20 @@ php artisan serve
 Database configuration should be updated inside the .env file before running migrations.
 
 ---
+
+## Screenshots
+
+### Admin Dashboard
+
+### Case Management
+
+### Case Details
+
+### Document Management
+
+### Audit Logs
+
+### Search Module
 
 ## Disclaimer
 
